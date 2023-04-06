@@ -1,0 +1,96 @@
+/* Fonts */
+
+:root {
+	--font1: "Indie Flower";
+	--font2: "Fredericka the Great";
+	--font3: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+@font-face {
+	font-family: "Indie Flower";
+	src: url("../public/fonts/Indie_Flower/IndieFlower-Regular.ttf")
+		format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Fredericka the Great";
+	src: url("../public/fonts/Fredericka_the_Great/FrederickatheGreat-Regular.ttf")
+		format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* General styles */
+
+.light {
+	--foreground: black;
+	--background: white;
+	--toggle-color: black;
+	--toggle-background: invert(100%);
+	transition: 300ms color, 500ms background-color;
+}
+
+.dark {
+	--foreground: white;
+	--background: black;
+	--toggle-color: white;
+	--toggle-background: ;
+	transition: 300ms color, 500ms background-color;
+}
+
+main {
+	color: var(--foreground);
+	background-color: var(--background);
+	height: 100vh;
+}
+
+*,
+::after,
+::before {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+html,
+body {
+	max-width: 100vw;
+	overflow-x: hidden;
+	font-family: var(--font1), var(--font2);
+	caret-color: transparent;
+	user-select: none;
+	font-size: 1.1rem;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+	transition: color 200ms;
+}
+
+a:hover {
+	transition: none;
+}
+
+.dark a {
+	color: aqua;
+}
+.dark a:hover {
+	color: darkcyan;
+}
+
+.light a {
+	color: blue;
+}
+.light a:hover {
+	color: blueviolet;
+}
+
+@media (prefers-color-scheme: dark) {
+	html {
+		color-scheme: dark;
+	}
+}

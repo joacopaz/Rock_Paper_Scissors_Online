@@ -1,0 +1,74 @@
+.toggleContainer {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	padding: 0.5rem;
+	display: flex;
+	cursor: pointer;
+	gap: 5px;
+	font-size: 1rem;
+	transition: scale 100ms, filter 100ms;
+}
+
+.toggleContainer:hover {
+	scale: 1.1;
+	filter: invert(20%);
+}
+
+.toggle {
+	color: var(--toggle-color);
+	border: 1px solid #707070;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	transition: scale 200ms, filter 500ms;
+	position: relative;
+	overflow: hidden;
+	background: transparent;
+	pointer-events: none;
+}
+
+.toggle::before {
+	content: "";
+	position: absolute;
+	top: -2px;
+	left: 0;
+	width: 60%;
+	height: 120%;
+	background-color: var(--foreground);
+	transition: background-color 200ms;
+	border-radius: 50%;
+}
+
+.formControl {
+	transition: background-color 200ms, color 200ms, box-shadow 200ms,
+		border-color 200ms;
+	font-family: var(--font3);
+	max-width: 200px;
+}
+
+.formControl::placeholder {
+	font-family: var(--font1);
+}
+
+.formControl.dark {
+	border-color: darkgray;
+	color: white;
+	background-color: black;
+}
+
+.formControl.dark::placeholder {
+	color: rgb(203, 199, 199);
+}
+
+.formControl.dark:focus {
+	border-color: #85afefad;
+	box-shadow: 0 0 0 0.25rem rgba(0, 139, 139, 0.753);
+	background-color: black;
+	color: white;
+}
+
+.submitBtn.dark:focus {
+	border-color: #85afefad;
+	box-shadow: 0 0 0 0.25rem rgba(0, 139, 139, 0.753);
+}

@@ -1,0 +1,34 @@
+.container {
+	padding: 2rem;
+	border: red solid;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+.loginContainer {
+	padding: 1rem;
+	width: 500px;
+	display: flex;
+	align-items: center;
+	border-radius: 15px;
+	flex-direction: column;
+	transition: background-color 200ms;
+}
+
+.dark {
+	background: rgb(33, 33, 33);
+	box-shadow: 5px 5px 30px 0px #4b4f4fb7;
+	border: grey solid 1px;
+}
+
+.light {
+	background: linear-gradient(
+		to bottom right,
+		rgb(246, 234, 255),
+		white,
+		rgb(246, 234, 255)
+	);
+	box-shadow: 5px 5px 5px 5px grey;
+}
