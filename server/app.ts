@@ -6,6 +6,10 @@ import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import router from "./routing/router.js";
+import session, { SessionOptions } from "express-session";
+import pg from "pg";
+import connectPg from "connect-pg-simple";
+import { cookieOptions } from "./utils/cookieSettings.js";
 
 // Creating App
 const app = express();
@@ -19,6 +23,27 @@ app.use(
 		origin: "http://localhost:5173",
 		methods: "GET, POST, PUT, DELETE",
 		credentials: true,
+	})
+);
+
+const pgStore = connectPg(session);
+
+const pgPool = new pg.Pool({
+	connectionString: `postgres://postgres:${process.env.DB_PASS}@db.efkcvidvtxfdkdoyojql.supabase.co:6543/postgres`,
+});
+
+app.use(
+	session({
+		store: new pgStore({
+			pool: pgPool, // Connection pool
+			tableName: "sessions", // Use another table-name than the default "session" one
+			createTableIfMissing: true,
+			errorLog: (err) => console.log(err),
+			pruneSessionInterval: 60, // Prune expired entries every 60 seconds
+		}),
+		secret: process.env.COOKIE_SECRET!,
+		resave: false,
+		cookie: cookieOptions, // live for 1 day
 	})
 );
 

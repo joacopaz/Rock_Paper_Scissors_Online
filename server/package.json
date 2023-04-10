@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"start": "concurrently \"npm run watch\" \"npm run serve\"",
-		"serve": "nodemon dist/app.js",
+		"serve": "nodemon --delay 1000 dist/app.js",
 		"watch": "tsc --watch"
 	},
 	"author": "",
@@ -14,7 +14,6 @@
 		"@supabase/supabase-js": "^2.13.1",
 		"concurrently": "^8.0.1",
 		"connect-pg-simple": "^8.0.0",
-		"cookie-parser": "^1.4.6",
 		"cors": "^2.8.5",
 		"crypto": "^1.0.1",
 		"dotenv": "^16.0.3",
@@ -29,12 +28,11 @@
 	},
 	"devDependencies": {
 		"@types/connect-pg-simple": "^7.0.0",
-		"@types/cookie-parser": "^1.4.3",
 		"@types/cors": "^2.8.13",
 		"@types/express": "^4.17.17",
+		"@types/express-session": "^1.17.7",
 		"@types/node": "^18.15.11",
 		"@types/pg": "^8.6.6",
-		"@types/socket.io": "^3.0.2",
-		"@types/express-session": "^1.17.7"
+		"@types/socket.io": "^3.0.2"
 	}
 }

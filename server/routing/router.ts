@@ -1,19 +1,15 @@
+import "./sockets.js";
 import { CookieOptions, Router } from "express";
 import formatter from "../utils/dateformatter.js";
-import "./sockets.js";
 import { db } from "../db";
-import cookieParser from "cookie-parser";
 import "../utils/stringVerifyMethods.js"; // extending String.prototype to include verify functions
 import { checkUserExists } from "../utils/dbFunctions.js";
 
-// /api endpoint configuration
-
 const router = Router();
 
-const key = crypto.randomUUID();
+/* /api endpoint configuration */
 
-router.use(cookieParser(key));
-
+// Logger middleware
 router.use((req, res, next) => {
 	const ip = req.headers["x-forwarded-for"] || req.ip;
 	console.log(
@@ -21,15 +17,6 @@ router.use((req, res, next) => {
 	);
 	next();
 });
-
-const cookieOptions: CookieOptions = {
-	httpOnly: true,
-	secure: true,
-	domain: process.env.NODE_ENV === "Development" ? ".localhost" : "TBD",
-	sameSite: "strict",
-	signed: true,
-	maxAge: 1000 * 60 * 60, // 1 hour => 1000 = second * 60 = minute * 60 = hour
-};
 
 router.get("/", async (req, res) => {
 	// const { data, error } = await db.from("users").select("*");

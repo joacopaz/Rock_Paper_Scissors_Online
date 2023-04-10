@@ -1,6 +1,8 @@
 import { Server } from "socket.io";
 
-const io = new Server(3000, { cors: { origin: ["http://localhost:5173"] } });
+export const io = new Server(3000, {
+	cors: { origin: ["http://localhost:5173"] },
+});
 console.log("Socket listening on port 3000...");
 
 io.use((socket, next) => {
