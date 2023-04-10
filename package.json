@@ -1,0 +1,33 @@
+{
+	"name": "rock_paper_scissors_online",
+	"version": "1.0.0",
+	"scripts": {
+		"front-end": "ttab -t 'Client' & cd client && npm start",
+		"back-end": "ttab -t 'Server' & cd server && npm start",
+		"start": "npm-run-all -p -l front-end back-end",
+		"test": "cypress run"
+	},
+	"keywords": [
+		"game",
+		"rock",
+		"paper",
+		"scissors",
+		"online",
+		"multiplayer",
+		"socket.io",
+		"react",
+		"node",
+		"express",
+		"cypress"
+	],
+	"author": "Joaquín Paz",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/cypress": "^1.1.3",
+		"cypress": "^12.9.0",
+		"npm-run-all": "^4.1.5"
+	},
+	"dependencies": {
+		"@supabase/supabase-js": "^2.17.0"
+	}
+}

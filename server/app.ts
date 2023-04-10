@@ -32,8 +32,8 @@ app.use((req, res, next) => {
 
 app.use(
 	rateLimit({
-		windowMs: 4000, // 4 second
-		max: 1, // 1 requests
+		windowMs: 60000,
+		max: 20, // 20 requests per minute
 	})
 );
 

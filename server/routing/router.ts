@@ -47,7 +47,7 @@ router.post("/create-account", async (req, res) => {
 	} catch (error: any) {
 		res.statusMessage = error.message;
 		res.statusCode = 400;
-		return res.send();
+		return res.send({ error: error.message });
 	}
 	res.sendStatus(200);
 });

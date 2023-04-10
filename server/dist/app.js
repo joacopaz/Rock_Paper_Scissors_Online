@@ -29,8 +29,8 @@ app.use((req, res, next) => {
     next();
 });
 app.use((0, express_rate_limit_1.default)({
-    windowMs: 4000,
-    max: 1, // 1 requests
+    windowMs: 60000,
+    max: 20, // 20 requests per minute
 }));
 app.use(express_1.default.json());
 const router = require("./routing/router");
