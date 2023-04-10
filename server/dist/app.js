@@ -34,7 +34,8 @@ app.use(session({
     }),
     secret: process.env.COOKIE_SECRET,
     resave: false,
-    cookie: cookieOptions, // live for 1 day
+    cookie: cookieOptions,
+    saveUninitialized: false,
 }));
 // Check for origin header
 app.use((req, res, next) => {

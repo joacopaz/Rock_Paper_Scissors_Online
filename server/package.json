@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"start": "concurrently \"npm run watch\" \"npm run serve\"",
-		"serve": "nodemon --delay 1000 dist/app.js",
+		"serve": "nodemon --delay 100 dist/app.js",
 		"watch": "tsc --watch"
 	},
 	"author": "",

@@ -44,6 +44,7 @@ app.use(
 		secret: process.env.COOKIE_SECRET!,
 		resave: false,
 		cookie: cookieOptions, // live for 1 day
+		saveUninitialized: false,
 	})
 );
 
