@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 String.prototype.isValidUsername = function () {
     // Use a regular expression to check for valid characters
     const regex = /^[a-zA-Z0-9]{4,20}$/;

@@ -1,21 +1,16 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const dateformatter_js_1 = __importDefault(require("../utils/dateformatter.js"));
-require("./sockets");
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
-require("../utils/stringVerifyMethods"); // extending String.prototype to include verify functions
-const dbFunctions_js_1 = require("../utils/dbFunctions.js");
+import { Router } from "express";
+import formatter from "../utils/dateformatter.js";
+import "./sockets.js";
+import cookieParser from "cookie-parser";
+import "../utils/stringVerifyMethods.js"; // extending String.prototype to include verify functions
+import { checkUserExists } from "../utils/dbFunctions.js";
 // /api endpoint configuration
-const router = (0, express_1.Router)();
+const router = Router();
 const key = crypto.randomUUID();
-router.use((0, cookie_parser_1.default)(key));
+router.use(cookieParser(key));
 router.use((req, res, next) => {
     const ip = req.headers["x-forwarded-for"] || req.ip;
-    console.log(`${req.method} Request received ${dateformatter_js_1.default.format(new Date())} @ ${ip}`);
+    console.log(`${req.method} Request received ${formatter.format(new Date())} @ ${ip}`);
     next();
 });
 const cookieOptions = {
@@ -39,7 +34,7 @@ router.post("/create-account", async (req, res) => {
             throw Error("Invalid Password");
         if (!email.isValidEmail())
             throw Error("Invalid Email");
-        if (await (0, dbFunctions_js_1.checkUserExists)(user))
+        if (await checkUserExists(user))
             throw Error("Username is already in use");
     }
     catch (error) {
@@ -49,7 +44,7 @@ router.post("/create-account", async (req, res) => {
     }
     res.sendStatus(200);
 });
-exports.default = router;
+export default router;
 /* Notes
 
 DB usage

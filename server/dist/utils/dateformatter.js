@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // Formatter
 const options = {
     hour12: true,
@@ -11,5 +9,5 @@ const options = {
     minute: "numeric",
     second: "numeric",
 };
-exports.default = new Intl.DateTimeFormat(undefined, options);
+export default new Intl.DateTimeFormat(undefined, options);
 //# sourceMappingURL=dateformatter.js.map

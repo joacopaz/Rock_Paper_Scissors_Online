@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const socket_io_1 = require("socket.io");
-const io = new socket_io_1.Server(3000, { cors: { origin: ["http://localhost:5173"] } });
+import { Server } from "socket.io";
+const io = new Server(3000, { cors: { origin: ["http://localhost:5173"] } });
 console.log("Socket listening on port 3000...");
 io.use((socket, next) => {
     if (socket.handshake.auth.token) {

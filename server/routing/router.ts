@@ -1,9 +1,9 @@
 import { CookieOptions, Router } from "express";
 import formatter from "../utils/dateformatter.js";
-import "./sockets";
+import "./sockets.js";
 import { db } from "../db";
 import cookieParser from "cookie-parser";
-import "../utils/stringVerifyMethods"; // extending String.prototype to include verify functions
+import "../utils/stringVerifyMethods.js"; // extending String.prototype to include verify functions
 import { checkUserExists } from "../utils/dbFunctions.js";
 
 // /api endpoint configuration
