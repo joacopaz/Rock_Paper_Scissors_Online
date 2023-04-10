@@ -6,13 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const dateformatter_js_1 = __importDefault(require("../utils/dateformatter.js"));
 require("./sockets");
-const cookieParser = require("cookie-parser");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 require("../utils/stringVerifyMethods"); // extending String.prototype to include verify functions
 const dbFunctions_js_1 = require("../utils/dbFunctions.js");
 // /api endpoint configuration
 const router = (0, express_1.Router)();
 const key = crypto.randomUUID();
-router.use(cookieParser(key));
+router.use((0, cookie_parser_1.default)(key));
 router.use((req, res, next) => {
     const ip = req.headers["x-forwarded-for"] || req.ip;
     console.log(`${req.method} Request received ${dateformatter_js_1.default.format(new Date())} @ ${ip}`);
@@ -49,7 +49,7 @@ router.post("/create-account", async (req, res) => {
     }
     res.sendStatus(200);
 });
-module.exports = router;
+exports.default = router;
 /* Notes
 
 DB usage

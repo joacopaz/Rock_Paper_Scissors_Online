@@ -1,11 +1,11 @@
-const dotenv = require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 import express, { Router } from "express";
 import { createServer } from "http";
 import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-
-console.clear();
+import router from "./routing/router.js";
 
 // Creating App
 const app = express();
@@ -39,11 +39,11 @@ app.use(
 
 app.use(express.json());
 
-const router: Router = require("./routing/router");
 app.use("/api", router);
 
 const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
 	console.log(`Server listening on port ${port}...`);
+	console.log("Client running on http://localhost:5173...");
 });

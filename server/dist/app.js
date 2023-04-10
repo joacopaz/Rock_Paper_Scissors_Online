@@ -3,13 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv = require("dotenv").config();
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
 const http_1 = require("http");
 const helmet_1 = __importDefault(require("helmet"));
 const cors_1 = __importDefault(require("cors"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
-console.clear();
+const router_js_1 = __importDefault(require("./routing/router.js"));
 // Creating App
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
@@ -33,10 +34,10 @@ app.use((0, express_rate_limit_1.default)({
     max: 20, // 20 requests per minute
 }));
 app.use(express_1.default.json());
-const router = require("./routing/router");
-app.use("/api", router);
+app.use("/api", router_js_1.default);
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
     console.log(`Server listening on port ${port}...`);
+    console.log("Client running on http://localhost:5173...");
 });
 //# sourceMappingURL=app.js.map

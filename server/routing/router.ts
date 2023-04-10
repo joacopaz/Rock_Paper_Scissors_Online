@@ -1,8 +1,8 @@
 import { CookieOptions, Router } from "express";
 import formatter from "../utils/dateformatter.js";
-require("./sockets");
+import "./sockets";
 import { db } from "../db";
-const cookieParser = require("cookie-parser");
+import cookieParser from "cookie-parser";
 import "../utils/stringVerifyMethods"; // extending String.prototype to include verify functions
 import { checkUserExists } from "../utils/dbFunctions.js";
 
@@ -51,8 +51,7 @@ router.post("/create-account", async (req, res) => {
 	}
 	res.sendStatus(200);
 });
-
-module.exports = router;
+export default router;
 
 /* Notes
 
