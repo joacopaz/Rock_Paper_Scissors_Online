@@ -5,13 +5,15 @@
 	"type": "module",
 	"scripts": {
 		"start": "concurrently \"npm run watch\" \"npm run serve\"",
-		"serve": "nodemon --delay 10 dist/app.js",
+		"serve": "nodemon --delay 2 dist/app.js",
 		"watch": "tsc --watch"
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
 		"@supabase/supabase-js": "^2.13.1",
+		"@types/bcrypt": "^5.0.0",
+		"bcrypt": "^5.1.0",
 		"concurrently": "^8.0.1",
 		"connect-pg-simple": "^8.0.0",
 		"cors": "^2.8.5",

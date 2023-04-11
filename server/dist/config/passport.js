@@ -1,19 +1,18 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { db } from "./db.js";
-import { checkPassword } from "../utils/dbFunctions.js";
+import { checkPassword, useDb } from "../utils/dbFunctions.js";
 const verifyCallback = async (username, password, done) => {
     try {
-        const { data } = await db
-            .from("users")
-            .select("username, hash, salt")
-            .eq("username", username);
+        const data = await useDb("users", "username, hash", {
+            username: username,
+        });
+        if (!data)
+            return done(null, false);
         const storedUser = data[0]?.username;
         const storedHash = data[0]?.hash;
-        const storedSalt = data[0]?.salt;
-        if (!storedUser || !storedHash || !storedSalt)
+        if (!storedUser || !storedHash)
             return done(null, false);
-        if (checkPassword(password, storedHash, storedSalt))
+        if (await checkPassword(password, storedHash))
             return done(null, storedUser);
         return done(null, false);
     }
