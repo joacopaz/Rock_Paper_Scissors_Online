@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import express, { Router } from "express";
+import express from "express";
 import { createServer } from "http";
 import helmet from "helmet";
 import cors from "cors";
@@ -10,6 +10,7 @@ import session, { SessionOptions } from "express-session";
 import pg from "pg";
 import connectPg from "connect-pg-simple";
 import { cookieOptions } from "./utils/cookieSettings.js";
+import formatter from "./utils/dateformatter.js";
 
 // Creating App
 const app = express();
@@ -26,6 +27,7 @@ app.use(
 	})
 );
 
+// Setting up store for sessions
 const pgStore = connectPg(session);
 
 const pgPool = new pg.Pool({
@@ -48,7 +50,7 @@ app.use(
 	})
 );
 
-// Check for origin header
+// Force origin header on requests
 app.use((req, res, next) => {
 	if (!req.headers.origin) return res.sendStatus(400);
 	// Handling CORP policy
@@ -56,6 +58,7 @@ app.use((req, res, next) => {
 	next();
 });
 
+// Rate limiting
 app.use(
 	rateLimit({
 		windowMs: 60000,
@@ -64,6 +67,17 @@ app.use(
 );
 
 app.use(express.json());
+
+// Logger middleware
+app.use((req, res, next) => {
+	const ip = req.headers["x-forwarded-for"] || req.ip;
+	console.log(
+		`${req.method} Request received from session ${
+			req.sessionID
+		} ${formatter.format(new Date())} @ ${ip}`
+	);
+	next();
+});
 
 app.use("/api", router);
 

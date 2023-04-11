@@ -1,16 +1,13 @@
 import "./sockets.js";
 import { Router } from "express";
-import formatter from "../utils/dateformatter.js";
 import "../utils/stringVerifyMethods.js"; // extending String.prototype to include verify functions
 import { checkUserExists } from "../utils/dbFunctions.js";
 const router = Router();
+// Authentication config
+import passport from "../config/passport.js";
+router.use(passport.initialize());
+router.use(passport.session());
 /* /api endpoint configuration */
-// Logger middleware
-router.use((req, res, next) => {
-    const ip = req.headers["x-forwarded-for"] || req.ip;
-    console.log(`${req.method} Request received ${formatter.format(new Date())} @ ${ip}`);
-    next();
-});
 router.get("/", async (req, res) => {
     // const { data, error } = await db.from("users").select("*");
     // res.send({ data });

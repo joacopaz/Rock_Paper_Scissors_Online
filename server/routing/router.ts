@@ -1,22 +1,16 @@
 import "./sockets.js";
-import { CookieOptions, Router } from "express";
-import formatter from "../utils/dateformatter.js";
-import { db } from "../db";
+import { Router } from "express";
+import { db } from "../config/db.js";
 import "../utils/stringVerifyMethods.js"; // extending String.prototype to include verify functions
 import { checkUserExists } from "../utils/dbFunctions.js";
-
 const router = Router();
 
-/* /api endpoint configuration */
+// Authentication config
+import passport from "../config/passport.js";
+router.use(passport.initialize());
+router.use(passport.session());
 
-// Logger middleware
-router.use((req, res, next) => {
-	const ip = req.headers["x-forwarded-for"] || req.ip;
-	console.log(
-		`${req.method} Request received ${formatter.format(new Date())} @ ${ip}`
-	);
-	next();
-});
+/* /api endpoint configuration */
 
 router.get("/", async (req, res) => {
 	// const { data, error } = await db.from("users").select("*");
@@ -38,6 +32,7 @@ router.post("/create-account", async (req, res) => {
 	}
 	res.sendStatus(200);
 });
+
 export default router;
 
 /* Notes
