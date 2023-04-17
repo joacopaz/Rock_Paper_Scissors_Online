@@ -41,8 +41,10 @@ app.use(session({
 }));
 // Force origin header on requests
 app.use((req, res, next) => {
-    if (!req.headers.origin)
+    if (!req.headers.origin && req.method !== "GET") {
+        console.log("Missing origin");
         return res.sendStatus(400);
+    }
     // Handling CORP policy
     res.setHeader("Cross-Origin-Resource-Policy", "same-site");
     next();

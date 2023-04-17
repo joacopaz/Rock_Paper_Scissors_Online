@@ -1,19 +1,20 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { checkPassword, useDb } from "../utils/dbFunctions.js";
+import { checkPassword, getUserById, useDb } from "../utils/dbFunctions.js";
 const verifyCallback = async (username, password, done) => {
     try {
-        const data = await useDb("users", "username, hash", {
+        const data = await useDb("users", "username, hash, id", {
             username: username,
         });
         if (!data)
             return done(null, false);
-        const storedUser = data[0]?.username;
-        const storedHash = data[0]?.hash;
+        const user = data[0];
+        const storedUser = user.username;
+        const storedHash = user.hash;
         if (!storedUser || !storedHash)
             return done(null, false);
         if (await checkPassword(password, storedHash))
-            return done(null, storedUser);
+            return done(null, user);
         return done(null, false);
     }
     catch (error) {
@@ -21,6 +22,18 @@ const verifyCallback = async (username, password, done) => {
     }
 };
 const strategy = new LocalStrategy(verifyCallback);
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await getUserById(id);
+        done(null, user);
+    }
+    catch (error) {
+        done(error);
+    }
+});
 passport.use(strategy);
 export default passport;
 //# sourceMappingURL=passport.js.map

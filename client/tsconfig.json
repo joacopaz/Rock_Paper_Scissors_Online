@@ -17,13 +17,13 @@
 		"jsx": "react-jsx",
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"],
 			"@styles/*": ["./src/styles/*"],
 			"@components/*": ["./src/components/*"],
 			"@providers/*": ["./src/providers/*"],
 			"@pages/*": ["./src/pages/*"],
 			"@assets/*": ["./src/assets/*"],
-			"@utils/*": ["./src/utils/*"]
+			"@utils/*": ["./src/utils/*"],
+			"@hooks/*": ["./src/hooks/*"]
 		},
 		"typeRoots": ["node_modules/@types"],
 		"allowArbitraryExtensions": true

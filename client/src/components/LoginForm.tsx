@@ -1,8 +1,10 @@
 import { Form, Button, Card, Alert, Spinner } from "react-bootstrap";
-import { FormEvent, ChangeEvent, useState } from "react";
+import { FormEvent, ChangeEvent, useState, ClassAttributes } from "react";
 import { useTheme } from "@providers/ThemeProvider";
 import styles from "@styles/landing.module.css";
-import { api } from "@/utils/api";
+import { useNavigate } from "react-router-dom";
+import useFetch from "@hooks/useFetch";
+import { useAuth } from "@providers/AuthProvider";
 
 export default function LoginForm({
 	className,
@@ -12,41 +14,41 @@ export default function LoginForm({
 	action: string;
 }) {
 	const { theme } = useTheme();
+	const navigate = useNavigate();
+	const { clientLogin } = useAuth();
 
-	const [fetching, setFetching] = useState(false);
-	const [error, setError] = useState("");
+	const { fetching, error, success, myFetch } = useFetch();
+
 	const [user, setUser] = useState("");
 	const [pass, setPass] = useState("");
 	const [email, setEmail] = useState("");
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		try {
-			let response: any;
-			setFetching(true);
-			switch (action) {
-				case "Create Account":
-					response = await fetch(`${api}/create-account`, {
-						method: "POST",
-						credentials: "include",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ user, pass, email }),
+		switch (action) {
+			case "Create Account":
+				const createData = await myFetch(`/api/create-account`, "POST", {
+					username: user,
+					password: pass,
+					email,
+				});
+				break;
+			case "Login":
+				const loginData = await myFetch(`/api/login`, "POST", {
+					username: user,
+					password: pass,
+				});
+				if (loginData.user)
+					clientLogin({
+						name: loginData.user.name,
+						id: loginData.user.id,
+						expires: loginData.user.expires,
 					});
-					break;
-
-				default:
-					break;
-			}
-
-			if (!response.ok)
-				return setError(response.statusText), setFetching(false);
-			const jsonResponse = await response?.json();
-			console.log(jsonResponse);
-		} catch (error: any) {
-			setError(error.message);
+			default:
+				break;
 		}
-		setFetching(false);
 	};
+
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const wordRegex = /^[a-zA-Z0-9]+$/;
 		const { data } = e.nativeEvent as InputEvent;
@@ -172,6 +174,15 @@ export default function LoginForm({
 					variant="danger"
 				>
 					{error}
+				</Alert>
+			) : null}
+			{success ? (
+				<Alert
+					className="text-center"
+					style={{ fontFamily: "var(--font3)", fontSize: "0.9rem" }}
+					variant="success"
+				>
+					{success}
 				</Alert>
 			) : null}
 		</>

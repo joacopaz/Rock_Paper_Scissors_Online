@@ -1,8 +1,10 @@
 import LoginForm from "@components/LoginForm";
 import main from "@styles/pageStyles.module.css";
 import { useTheme } from "@providers/ThemeProvider";
+import useRedirect from "@hooks/useRedirect";
 
 export default function SignUp() {
+	useRedirect();
 	const { theme } = useTheme();
 	return (
 		<div className={`${main.container}`}>

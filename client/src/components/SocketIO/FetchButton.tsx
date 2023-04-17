@@ -1,5 +1,3 @@
-import { Http2ServerRequest } from "http2";
-
 export default function FetchButton({
 	endpoint,
 	method,
@@ -14,6 +12,9 @@ export default function FetchButton({
 			const response = await fetch(endpoint, {
 				method,
 				credentials: "include",
+				headers: {
+					Origin: "http://localhost:5173",
+				},
 			}); // must include credentials for cookies to be set
 			if (!response.ok) throw new Error(response.statusText);
 			const result = await response.json();

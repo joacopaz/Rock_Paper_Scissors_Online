@@ -2,8 +2,8 @@
 	"name": "rock_paper_scissors_online",
 	"version": "1.0.0",
 	"scripts": {
-		"front-end": "ttab -t 'Client' & cd client && npm start",
-		"back-end": "ttab -t 'Server' & cd server && npm start",
+		"front-end": "cd client && npm start",
+		"back-end": "cd server && npm start",
 		"start": "npm-run-all -p -l front-end back-end",
 		"test": "cypress run"
 	},

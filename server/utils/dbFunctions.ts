@@ -1,14 +1,21 @@
 import { db } from "../config/db.js";
-import { User } from "./dbTypes.js";
 import bcrypt from "bcrypt";
+import { User } from "./dbTypes.js";
 
-export async function checkUserExists(
-	username: User["username"]
-): Promise<boolean> {
+export async function checkUserInUse(username: string): Promise<boolean> {
 	const response: any = await db
 		.from("users")
 		.select("username")
 		.eq("username", username);
+	if (response.data.length > 0) return true;
+	return false;
+}
+
+export async function checkEmailInUse(email: string): Promise<boolean> {
+	const response: any = await db
+		.from("users")
+		.select("email")
+		.eq("email", email);
 	if (response.data.length > 0) return true;
 	return false;
 }
@@ -34,6 +41,50 @@ export async function checkPassword(
 		console.log(error);
 		return false;
 	}
+}
+
+export async function createUser(
+	username: string,
+	email: string,
+	password: string,
+	sessionId: string,
+	expires_at: number
+): Promise<User | false> {
+	try {
+		const hash = await hashPassword(password);
+		const newUser: User = {
+			username,
+			hash,
+			email,
+			created_at: Date.now(),
+			session: sessionId,
+			expires_at,
+		};
+		const { status, error } = await db.from("users").insert(newUser);
+		const newId = await db.from("users").select("id").eq("username", username);
+		if (error) console.log(error);
+		if (status === 201) return { ...newUser, id: newId.data![0].id };
+		return false;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}
+
+export async function getUserById(
+	id: number
+): Promise<false | { username: string; id: number }> {
+	const { data, error } = await db
+		.from("users")
+		.select("username, id")
+		.eq("id", id);
+	if (error) {
+		console.log(error);
+		return false;
+	}
+	if (data.length === 0) return false;
+	if (data) return data[0];
+	return false;
 }
 
 /**

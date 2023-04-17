@@ -1,10 +1,19 @@
 import { db } from "../config/db.js";
 import bcrypt from "bcrypt";
-export async function checkUserExists(username) {
+export async function checkUserInUse(username) {
     const response = await db
         .from("users")
         .select("username")
         .eq("username", username);
+    if (response.data.length > 0)
+        return true;
+    return false;
+}
+export async function checkEmailInUse(email) {
+    const response = await db
+        .from("users")
+        .select("email")
+        .eq("email", email);
     if (response.data.length > 0)
         return true;
     return false;
@@ -28,6 +37,45 @@ export async function checkPassword(passwordToCheck, storedHash) {
         console.log(error);
         return false;
     }
+}
+export async function createUser(username, email, password, sessionId, expires_at) {
+    try {
+        const hash = await hashPassword(password);
+        const newUser = {
+            username,
+            hash,
+            email,
+            created_at: Date.now(),
+            session: sessionId,
+            expires_at,
+        };
+        const { status, error } = await db.from("users").insert(newUser);
+        const newId = await db.from("users").select("id").eq("username", username);
+        if (error)
+            console.log(error);
+        if (status === 201)
+            return { ...newUser, id: newId.data[0].id };
+        return false;
+    }
+    catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+export async function getUserById(id) {
+    const { data, error } = await db
+        .from("users")
+        .select("username, id")
+        .eq("id", id);
+    if (error) {
+        console.log(error);
+        return false;
+    }
+    if (data.length === 0)
+        return false;
+    if (data)
+        return data[0];
+    return false;
 }
 /**
  * Returns matched data from the db

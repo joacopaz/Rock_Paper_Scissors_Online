@@ -8,7 +8,8 @@ import SignUp from "./pages/SignUp/SignUp";
 import AppLayout from "./AppLayout";
 import ErrorPage from "./pages/ErrorPage";
 import BackButton from "./components/BackButton";
-import Connect from "./components/Connect";
+import Connect from "./components/SocketIO/Connect";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
 	{
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
 			</>
 		),
 	},
+	{ path: "/dashboard", element: <Dashboard /> },
 	{
 		path: "/sign-guest",
 		element: (

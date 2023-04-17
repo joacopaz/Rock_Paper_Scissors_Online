@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "@/providers/ThemeProvider";
+import { useTheme } from "@providers/ThemeProvider";
 
 export default function BackButton() {
 	const router = useNavigate();

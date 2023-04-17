@@ -1,18 +1,12 @@
-export interface JWT {
-	userId: string;
-	sessionId: string;
-	expiresAt: number;
-}
-
 export interface User {
-	id: string;
+	id?: number; // assigns automatically
 	username: string;
-	password: string;
+	hash: string;
 	email: string;
-	createdAt: number;
-	session: JWT["sessionId"];
-	expiresAt: JWT["expiresAt"];
-	profilePictureUrl: string;
+	created_at: number;
+	session: string;
+	expires_at: number;
+	profilePictureUrl?: string;
 }
 
 export interface Round {
@@ -27,7 +21,7 @@ export interface Round {
 export interface Guest {
 	id: string;
 	createdAt: number;
-	expiresAt: JWT["expiresAt"];
+	expiresAt: number;
 }
 
 export interface Game {

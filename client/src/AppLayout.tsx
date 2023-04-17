@@ -1,11 +1,14 @@
 import ThemeProvider from "@providers/ThemeProvider";
 import ToggleTheme from "@components/ToggleTheme";
+import AuthProvider from "./providers/AuthProvider";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<ThemeProvider>
-			<ToggleTheme />
-			{children}
-		</ThemeProvider>
+		<AuthProvider>
+			<ThemeProvider>
+				<ToggleTheme />
+				{children}
+			</ThemeProvider>
+		</AuthProvider>
 	);
 }

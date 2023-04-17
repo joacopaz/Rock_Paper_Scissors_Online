@@ -2,9 +2,12 @@ import main from "@styles/pageStyles.module.css";
 import LoginForm from "@components/LoginForm";
 import { Link } from "react-router-dom";
 import { useTheme } from "@providers/ThemeProvider";
+import useRedirect from "@hooks/useRedirect";
 
 export default function Landing() {
+	useRedirect();
 	const { theme } = useTheme();
+
 	return (
 		<div className={main.container}>
 			<h1 className="m-5">Rock Papers Scissors Online</h1>
