@@ -1,19 +1,13 @@
 import "./sockets.js";
-import {
-	NextFunction,
-	Request,
-	RequestHandler,
-	Response,
-	Router,
-} from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import "../utils/stringVerifyMethods.js"; // extending String.prototype to include verify functions
 import {
 	checkUserInUse,
 	checkEmailInUse,
 	createUser,
-	getUserById,
 } from "../utils/dbFunctions.js";
 const router = Router();
+import { faker } from "@faker-js/faker";
 
 // Authentication config
 import passport from "../config/passport.js";
@@ -22,9 +16,8 @@ router.use(passport.session());
 
 /* /api endpoint configuration */
 
-router.get("/", (req, res) => {
-	console.log(req.user);
-	console.log(req.sessionID);
+router.post("/", (req, res) => {
+	console.log(req.session);
 	res.status(200).send({ message: "Hello World!" });
 });
 
@@ -63,7 +56,14 @@ router.post(
 			res.status(201);
 			res.send({
 				message: "Account created successfully",
-				user: { id: newUser.id, name: newUser.username },
+				user: {
+					id: newUser.id,
+					username: newUser.username,
+					expires: req.session.cookie.expires,
+				},
+			});
+			req.login({ id: newUser.id!, username: newUser.username }, (err) => {
+				console.log(err);
 			});
 		} catch (error: any) {
 			res.statusMessage = error.message;
@@ -76,8 +76,6 @@ router.post(
 router.post(
 	"/login",
 	async (req: Request, res: Response, next: NextFunction) => {
-		console.log(req.session);
-
 		if (req.user) {
 			if (req.body.username === req.user.username)
 				return res.status(200).send({
@@ -90,6 +88,7 @@ router.post(
 				});
 		}
 		next();
+		1;
 	},
 	passport.authenticate("local"),
 	(req, res) => {
@@ -109,5 +108,41 @@ router.post(
 		}
 	}
 );
+
+router.post("/sign-guest", async (req, res) => {
+	if (!req.user && !req.session.guest) {
+		req.session.guest = {
+			name: faker.name.firstName() + faker.name.lastName(),
+		};
+		return res.status(201).send({
+			message: "Created new guest",
+			user: {
+				name: req.session.guest.name,
+				id: null,
+				expires: req.session.cookie.expires,
+			},
+		});
+	}
+	if (req.user)
+		return res.status(200).send({
+			message: `You are already logged in as ${req.user.username}`,
+			user: {
+				name: req.user?.username,
+				id: req.user?.id,
+				expires: req.session.cookie.expires,
+			},
+		});
+	if (req.session.guest) {
+		console.log(req.session);
+		res.send({ message: "Already logged in as " + req.session.guest.name });
+	}
+});
+
+router.post("/logout", (req, res) => {
+	req.logOut((err) => {
+		if (err) console.log(err);
+		res.status(200).send({ message: "Successfully logged out" });
+	});
+});
 
 export default router;

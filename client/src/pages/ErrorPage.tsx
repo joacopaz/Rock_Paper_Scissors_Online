@@ -10,7 +10,6 @@ export default function ErrorPage() {
 		<div
 			style={{
 				height: "100%",
-				border: "red solid",
 				flexDirection: "column",
 				justifyContent: "center",
 				alignItems: "center",
@@ -18,7 +17,7 @@ export default function ErrorPage() {
 				gap: "50px",
 			}}
 		>
-			<h1 style={{}}>Oops! There was an error!</h1>
+			<h1>Oops! There was an error!</h1>
 			<img
 				src={kittyState === "happy" ? happyKitty : kitty}
 				style={{ maxHeight: "200px" }}

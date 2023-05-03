@@ -2,6 +2,7 @@ import { db } from "../config/db.js";
 import bcrypt from "bcrypt";
 import { User } from "./dbTypes.js";
 
+
 export async function checkUserInUse(username: string): Promise<boolean> {
 	const response: any = await db
 		.from("users")

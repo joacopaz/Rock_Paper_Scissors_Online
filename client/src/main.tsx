@@ -4,12 +4,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./pages/Landing/App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import SignUp from "./pages/SignUp/SignUp";
+import SignUp from "@pages/SignUp/SignUp";
 import AppLayout from "./AppLayout";
-import ErrorPage from "./pages/ErrorPage";
-import BackButton from "./components/BackButton";
-import Connect from "./components/SocketIO/Connect";
-import Dashboard from "./pages/Dashboard/Dashboard";
+import ErrorPage from "@pages/ErrorPage";
+import BackButton from "@components/BackButton";
+import Connect from "@components/SocketIO/Connect";
+import Dashboard from "@pages/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
 	{
@@ -36,23 +36,6 @@ const router = createBrowserRouter([
 		),
 	},
 	{ path: "/dashboard", element: <Dashboard /> },
-	{
-		path: "/sign-guest",
-		element: (
-			<div
-				style={{
-					display: "flex",
-					height: "100%",
-					justifyContent: "center",
-					alignItems: "center",
-				}}
-			>
-				<BackButton />
-				TBD - Create a SignGuest component and attach it to the /signGuest
-				endpoint @ main.tsx
-			</div>
-		),
-	},
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

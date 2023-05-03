@@ -1,0 +1,12 @@
+.logoutBtn {
+	font-size: 1.2rem;
+	position: fixed;
+	top: 1rem;
+	right: 4rem;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 80px;
+	min-height: 2.3rem;
+}

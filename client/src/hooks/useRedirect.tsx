@@ -7,5 +7,11 @@ export default function useRedirect() {
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (user) navigate("/dashboard");
-	}, []);
+		if (
+			!user &&
+			window.location.pathname !== "/sign-up" &&
+			window.location.pathname !== "/sign-guest"
+		)
+			navigate("/");
+	}, [user]);
 }

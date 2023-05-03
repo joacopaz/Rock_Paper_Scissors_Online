@@ -1,9 +1,13 @@
 import { Form, Button, Card, Alert, Spinner } from "react-bootstrap";
-import { FormEvent, ChangeEvent, useState, ClassAttributes } from "react";
+import {
+	FormEvent,
+	ChangeEvent,
+	useState,
+	ClassAttributes,
+	useEffect,
+} from "react";
 import { useTheme } from "@providers/ThemeProvider";
 import styles from "@styles/landing.module.css";
-import { useNavigate } from "react-router-dom";
-import useFetch from "@hooks/useFetch";
 import { useAuth } from "@providers/AuthProvider";
 
 export default function LoginForm({
@@ -14,10 +18,10 @@ export default function LoginForm({
 	action: string;
 }) {
 	const { theme } = useTheme();
-	const navigate = useNavigate();
-	const { clientLogin } = useAuth();
+	const { login, createAccount, error, success, loading, cleanMessages } =
+		useAuth();
 
-	const { fetching, error, success, myFetch } = useFetch();
+	useEffect(() => cleanMessages(), []);
 
 	const [user, setUser] = useState("");
 	const [pass, setPass] = useState("");
@@ -27,23 +31,10 @@ export default function LoginForm({
 		e.preventDefault();
 		switch (action) {
 			case "Create Account":
-				const createData = await myFetch(`/api/create-account`, "POST", {
-					username: user,
-					password: pass,
-					email,
-				});
+				createAccount(user, pass, email);
 				break;
 			case "Login":
-				const loginData = await myFetch(`/api/login`, "POST", {
-					username: user,
-					password: pass,
-				});
-				if (loginData.user)
-					clientLogin({
-						name: loginData.user.name,
-						id: loginData.user.id,
-						expires: loginData.user.expires,
-					});
+				login(user, pass);
 			default:
 				break;
 		}
@@ -141,7 +132,7 @@ export default function LoginForm({
 					<Button
 						variant="primary"
 						type="submit"
-						disabled={fetching}
+						disabled={loading}
 						style={{
 							fontSize: "1.3em",
 							padding: ".1em .5em",
@@ -153,7 +144,7 @@ export default function LoginForm({
 						}}
 						className={`${styles.submitBtn} ${styles[theme]}`}
 					>
-						{!fetching ? (
+						{!loading ? (
 							action
 						) : (
 							<Spinner

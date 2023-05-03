@@ -15,4 +15,12 @@ declare global {
 	}
 }
 
+declare module "express-session" {
+	interface SessionData {
+		guest: {
+			name: string;
+		};
+	}
+}
+
 export {};

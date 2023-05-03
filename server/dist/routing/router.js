@@ -1,16 +1,16 @@
 import "./sockets.js";
-import { Router, } from "express";
+import { Router } from "express";
 import "../utils/stringVerifyMethods.js"; // extending String.prototype to include verify functions
 import { checkUserInUse, checkEmailInUse, createUser, } from "../utils/dbFunctions.js";
 const router = Router();
+import { faker } from "@faker-js/faker";
 // Authentication config
 import passport from "../config/passport.js";
 router.use(passport.initialize());
 router.use(passport.session());
 /* /api endpoint configuration */
-router.get("/", (req, res) => {
-    console.log(req.user);
-    console.log(req.sessionID);
+router.post("/", (req, res) => {
+    console.log(req.session);
     res.status(200).send({ message: "Hello World!" });
 });
 router.post("/create-account", (req, res, next) => {
@@ -39,7 +39,14 @@ router.post("/create-account", (req, res, next) => {
         res.status(201);
         res.send({
             message: "Account created successfully",
-            user: { id: newUser.id, name: newUser.username },
+            user: {
+                id: newUser.id,
+                username: newUser.username,
+                expires: req.session.cookie.expires,
+            },
+        });
+        req.login({ id: newUser.id, username: newUser.username }, (err) => {
+            console.log(err);
         });
     }
     catch (error) {
@@ -49,7 +56,6 @@ router.post("/create-account", (req, res, next) => {
     }
 });
 router.post("/login", async (req, res, next) => {
-    console.log(req.session);
     if (req.user) {
         if (req.body.username === req.user.username)
             return res.status(200).send({
@@ -62,6 +68,7 @@ router.post("/login", async (req, res, next) => {
             });
     }
     next();
+    1;
 }, passport.authenticate("local"), (req, res) => {
     try {
         res.status(200);
@@ -78,6 +85,41 @@ router.post("/login", async (req, res, next) => {
         res.send({ message: "Error logging in, please try again" });
         console.log(error);
     }
+});
+router.post("/sign-guest", async (req, res) => {
+    if (!req.user && !req.session.guest) {
+        req.session.guest = {
+            name: faker.name.firstName() + faker.name.lastName(),
+        };
+        return res.status(201).send({
+            message: "Created new guest",
+            user: {
+                name: req.session.guest.name,
+                id: null,
+                expires: req.session.cookie.expires,
+            },
+        });
+    }
+    if (req.user)
+        return res.status(200).send({
+            message: `You are already logged in as ${req.user.username}`,
+            user: {
+                name: req.user?.username,
+                id: req.user?.id,
+                expires: req.session.cookie.expires,
+            },
+        });
+    if (req.session.guest) {
+        console.log(req.session);
+        res.send({ message: "Already logged in as " + req.session.guest.name });
+    }
+});
+router.post("/logout", (req, res) => {
+    req.logOut((err) => {
+        if (err)
+            console.log(err);
+        res.status(200).send({ message: "Successfully logged out" });
+    });
 });
 export default router;
 //# sourceMappingURL=router.js.map

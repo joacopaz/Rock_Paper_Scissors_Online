@@ -6,9 +6,9 @@ export default function useFetch() {
 	const [success, setSuccess] = useState("");
 	const [response, setResponse] = useState(null);
 
-	const myFetch = async (url: string, method: string, body: object) => {
-		if (error) setError("");
-		if (success) setSuccess("");
+	const myFetch = async (url: string, method: string, body?: object) => {
+		setError("");
+		setSuccess("");
 		setFetching(true);
 		try {
 			let response: any;
@@ -28,13 +28,14 @@ export default function useFetch() {
 			const jsonResponse = await response.json();
 			setSuccess(jsonResponse.message);
 			setResponse(jsonResponse);
-			setFetching(false);
 			console.log(jsonResponse);
+			setFetching(false);
 			return jsonResponse;
 		} catch (error: any) {
 			setError(error.message);
+			setFetching(false);
 		}
 	};
 
-	return { fetching, error, success, response, myFetch };
+	return { fetching, error, success, response, myFetch, setError, setSuccess };
 }
