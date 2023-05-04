@@ -32,3 +32,11 @@
 	);
 	box-shadow: 5px 5px 5px 5px grey;
 }
+
+.backContainer:hover .back {
+	filter: invert(40%);
+}
+
+.back {
+	transition: filter 200ms;
+}

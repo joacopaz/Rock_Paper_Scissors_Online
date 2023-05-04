@@ -86,26 +86,28 @@ router.post(
 						expires: req.session.cookie.expires,
 					},
 				});
-		}
-		next();
-		1;
-	},
-	passport.authenticate("local"),
-	(req, res) => {
-		try {
-			res.status(200);
-			res.send({
-				message: "Successfully logged in",
+		} else if (req.session.guest) {
+			return res.status(200).send({
+				message: `You are already logged in as ${req.session.guest.name}`,
 				user: {
-					name: req.user?.username,
-					id: req.user?.id,
+					name: req.session.guest.name,
+					id: null,
 					expires: req.session.cookie.expires,
 				},
 			});
-		} catch (error) {
-			res.send({ message: "Error logging in, please try again" });
-			console.log(error);
 		}
+		next();
+	},
+	passport.authenticate("local"),
+	(req, res) => {
+		res.status(200).send({
+			message: "Successfully logged in",
+			user: {
+				name: req.user?.username,
+				id: req.user?.id,
+				expires: req.session.cookie.expires,
+			},
+		});
 	}
 );
 
@@ -143,6 +145,12 @@ router.post("/logout", (req, res) => {
 		if (err) console.log(err);
 		res.status(200).send({ message: "Successfully logged out" });
 	});
+});
+
+router.post("/whoami", (req, res) => {
+	if (req.session.guest) return res.send(req.session.guest);
+	if (req.user) return res.send(req.user);
+	res.sendStatus(404);
 });
 
 export default router;
