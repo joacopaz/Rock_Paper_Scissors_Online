@@ -3,3 +3,5 @@
 Online full-stack game of Rock Paper Scissors with auth integration, guest accounts, account statistics and matchmaking with web-sockets.
 
 Currently under development, finishing the backend integration for the auth of the socket connections
+
+Update: Delayed indefinitely due to time constraints
